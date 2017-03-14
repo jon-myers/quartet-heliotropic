@@ -1,0 +1,28 @@
+# render every x second, with x slowing down the whole time
+
+from maximally_smooth import smooth_curve_exact_durtot as render
+
+def smooth_curve_exact_durtot(dur1,dur2,durtot):
+    set=smooth_curve_approximate_durtot(dur1,dur2,durtot)
+    nset=shifter(set,durtot)
+    return nset
+
+def renderer(dur1,dur2,durtot):
+    a= smooth_curve_exact_durtot(dur1,dur2,durtot)
+    b=[sum(a[:i+1]) for i in range(len(a))]
+    b=[round(960*i) for i in b]
+    c=[]
+    for i in range(len(b)):
+        if i == 0: c.append(b[i])
+        else:
+            c.append(b[i]-b[i-1])
+    return c
+
+
+tot=12*60
+
+# list of times
+rend_times=render(2,30,tot)
+rend_times=[rend_times[i]/tot for i in rend_times]
+t=[renderer(tempo_0(rend_times[i],1,1)+1,tempo_0(rend_times[i+1],),sum(rend_times[:i])) for i in range(len(rend_times)-1)]
+init_dur/2**
